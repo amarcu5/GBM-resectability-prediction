@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GBM resectability prediction</title>
+  
+  <link rel="manifest" href="./manifest.json">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="GBM resectability">
+  <link rel="apple-touch-icon" href="./icon.png">
+  
+  <script>
+    const predictionData = {
+      0b00000: 0.80499,
+      0b00001: 0.254626,
+      0b00010: 0.623570333333333,
+      0b00011: 0.153269333333333,
+      0b00100: 0.420630333333333,
+      0b00101: 0.0955377333333333,
+      0b00110: 0.267011,
+      0b00111: 0.0565479666666667,
+      0b01000: 0.748573666666667,
+      0b01001: 0.213796,
+      0b01010: 0.556595,
+      0b01011: 0.130212666666667,
+      0b01100: 0.35926,
+      0b01101: 0.0781489666666667,
+      0b01110: 0.225726,
+      0b01111: 0.0476067333333333,
+      0b10000: 0.457788,
+      0b10001: 0.0984969666666667,
+      0b10010: 0.281910333333333,
+      0b10011: 0.0565038,
+      0b10100: 0.157044666666667,
+      0b10101: 0.0377777333333333,
+      0b10110: 0.0893213666666667,
+      0b10111: 0.0220203866666667,
+      0b11000: 0.384192666666667,
+      0b11001: 0.0802421,
+      0b11010: 0.23081,
+      0b11011: 0.0474216,
+      0b11100: 0.126744,
+      0b11101: 0.0301383666666667,
+      0b11110: 0.0737807,
+      0b11111: 0.01826146,
+    };
+    
+    const optionIdList = [
+      'option-periventricular',
+      'option-oedema',
+      'option-bilateral',
+      'option-large',
+      'option-eloquent',
+    ];
+    
+    const setPredictionPercentAnimated = function(percentage, duration) {
+      const element = document.getElementById('result-percentage');
+      const startPercentage = parseFloat(element.innerHTML) || 0;
+      const rangePercentage = percentage - startPercentage;
+      
+      const startTimestamp = performance.now();
+  
+      const step = function(timestamp) {
+        const elapsedTime = timestamp - startTimestamp;
+        const progress = Math.min(elapsedTime / (duration || Number.MIN_VALUE), 1);
+        
+        const value = (startPercentage + progress * rangePercentage).toFixed(1);
+        element.innerHTML = value;
+        
+        if (progress < 1) window.requestAnimationFrame(step);
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    const predictGbmResectability = function(animated = true) {
+      let key = 0;
+      for (let index in optionIdList) {
+        key = key << 1;
+        if (document.getElementById(optionIdList[index]).checked) {
+          key |= 1;
+        }
+      }
+      
+      setPredictionPercentAnimated(predictionData[key] * 100, animated ? 300 : 0);
+    };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      for (let index in optionIdList) {
+        document.getElementById(optionIdList[index]).addEventListener('change', predictGbmResectability);
+      }
+      predictGbmResectability(false);
+      
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js');
+      }
+    });
+  
+  </script>
+  
+  <style>
+    
+    /* Colors */
+    :root {
+      --text-color: #555555;
+      --text-highlight-color: #29324d;
+      --control-selected-color: #52659c;
+      --control-background-color: #dddddd;
+      --control-color: #ffffff;
+    }
+
+    /* Common */
+    html {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+      -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      margin: 15px 15px 0 15px;
+      padding: 0;
+    }
+    
+    h1, .option-title, .option-subtitle, #result-percentage, #result-label {
+      font-family: "Avenir Next", system-ui;
+    }
+    
+    h1, .option-title, #result-percentage, #result-label {
+      color: var(--text-highlight-color);
+    }
+    
+    .option-subtitle {
+      color: var(--text-color);
+    }
+    
+    #prediction-form {
+      display: table;
+      width: 100%;
+      max-width: 600px;
+      padding: 0;
+      margin: 0 auto;
+    }
+    
+    .option-title, .option-subtitle, #result-percentage, #result-label {
+      display: block;
+    }
+    
+    @media (min-height: 500px) and (orientation: portrait) {
+      html {
+        position: fixed;
+        height: 100%;
+        width:100%;
+        overflow: hidden;
+      }
+    }
+
+    /* Heading */
+    h1 {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    @media (max-width: 350px) { 
+      h1 { font-size: 1.25em !important; } 
+    }
+    
+    /* Options */
+    .prediction-row {
+      display: table-row;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .prediction-label {
+      display: table-cell;
+      padding-right: 15px;
+      padding-bottom: 20px;
+    }
+    
+    .prediction-option {
+      overflow: hidden;
+      width: 48px;
+      display: table-cell;
+      vertical-align: middle;
+    }
+    
+    .option-title {
+      font-size: 1em;
+      font-weight: 500;
+    }
+    
+    .option-subtitle {
+      font-size: 0.75em;
+      font-weight: 400;
+    }
+    
+    
+    /* Results */
+    #prediction-result {
+      width: 100%;
+      text-align: center;
+      position: -webkit-sticky;
+      position: sticky;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      padding-bottom: 15px;
+    }
+    
+    #result-percentage {
+      font-size: 3.125em;
+      font-weight: 400;
+    }
+    
+    #result-label {
+      font-size: 0.75em;
+      font-weight: 400;
+    }
+    
+    
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+    
+    .prediction-input {
+      display: none;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--control-background-color);
+      transition: .3s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--control-color);
+      transition: .3s;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--control-selected-color);
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--control-selected-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    .slider.round {
+      border-radius: 26px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+  </style>
+</head>
+<body>
+  
+  <h1>GBM resectability prediction</h1>
+  
+  <form id="prediction-form">
+    <div class="prediction-row">
+      <label class="prediction-label" for="option-periventricular">
+        <span class="option-title">Periventricular location</span>
+        <span class="option-subtitle">If tumour is located within 10mm of the ventricles</span>
+      </label>
+      <div class="prediction-option">
+        <label class="switch">
+          <input type="checkbox" class="prediction-input" id="option-periventricular">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="prediction-row">
+      <label class="prediction-label" for="option-oedema">
+        <span class="option-title">Associated oedema</span>
+        <span class="option-subtitle">If hypointensity extended >10mm from the tumour</span>
+      </label>
+      <div class="prediction-option">
+        <label class="switch">
+          <input type="checkbox" class="prediction-input" id="option-oedema">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="prediction-row">
+      <label class="prediction-label" for="option-bilateral">
+        <span class="option-title">Bilateral location</span>
+        <span class="option-subtitle">If tumour extends into corpus callosum</span>
+      </label>
+      <div class="prediction-option">
+        <label class="switch">
+          <input type="checkbox" class="prediction-input" id="option-bilateral">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="prediction-row">
+      <label class="prediction-label" for="option-large">
+        <span class="option-title">Largest diameter</span>
+        <span class="option-subtitle">If largest diameter of tumour >40mm</span>
+      </label>
+      <div class="prediction-option">
+        <label class="switch">
+          <input type="checkbox" class="prediction-input" id="option-large">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="prediction-row">
+      <label class="prediction-label" for="option-eloquent">
+        <span class="option-title">Eloquent location</span>
+        <span class="option-subtitle">If tumour extended into motor or sensory cortex, language cortex, insula, or basal ganglia</span>
+      </label>
+      <div class="prediction-option">
+        <label class="switch">
+          <input type="checkbox" class="prediction-input" id="option-eloquent">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </form>
+  
+  <div id="prediction-result">
+    <span id="result-percentage"></span>
+    <span id="result-label">% chance of complete resection</span>
+  </div>
+  
+</body>
+</html>

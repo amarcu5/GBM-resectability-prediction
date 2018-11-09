@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GBM resectability prediction</title>
+  
+  <link rel="apple-touch-icon" href="./icon.png">
+  
+  <style>
+    
+    /* Colors */
+    :root {
+      --text-color: #555555;
+      --text-highlight-color: #29324d;
+      --control-selected-color: #52659c;
+      --control-background-color: #dddddd;
+      --control-color: #ffffff;
+    }
+    
+    /* Common */
+    html {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      margin: 15px;
+      padding: 0;
+    }
+    
+    h1, p, .option-title {
+      font-family: "Avenir Next", system-ui;
+    }
+    
+    h1, .option-title {
+      color: var(--text-highlight-color);
+      text-align: center;
+    }
+    
+    p {
+      color: var(--text-color);
+      font-size: 0.875em;
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.5;
+      margin: 0 auto;
+    }
+
+    /* Heading */
+    h1 {
+      font-size: 1.5em;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 350px) { 
+      h1 { font-size: 1.25em !important; } 
+    }
+
+    #option-parent {
+      max-width: 500px;
+      display: flex;
+      align-options: center;
+      margin: 0 auto;
+    }
+    
+    .option-title {
+      font-size: 1em;
+      font-weight: 500;
+      display: block;
+    }
+  
+    .option svg {
+      width: 90px;
+      height: 90px;
+      color: var(--control-background-color);
+      fill: var(--control-background-color);
+      transition: .3s;
+    }
+    
+    .option:hover svg {
+      color: var(--control-selected-color);
+      fill: var(--control-selected-color);
+    }
+    
+    .option {
+      text-decoration: none;
+      float: left;
+      margin: 15px auto;
+    }
+    
+  </style>
+</head>
+<body>
+  
+  <h1>GBM resectability prediction</h1>
+  
+  <p>This page lists the resources for the publication "Improved Prediction of Surgical Resectability in Patients with Glioblastoma Multiforme using an Artificial Neural Network: Development and Early Validation" by Adam P Marcus, Hani J Marcus, Sophie J Camp, Dipankar Nandi, Neil Kitchen, and Lewis Thorne.</p>
+  
+  <div id="option-parent">
+    
+    <a href="#" class="option">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+        <g fill="none" stroke="currentColor" stroke-miterlimit="10">
+          <path stroke-width="4" d="M12 7h37v45H12z"/>
+          <path stroke-width="3" d="M19 26h23M19 34h23M42 41H19M19 18h12"/>
+        </g>
+      </svg>
+      <span class="option-title">Paper</span>
+    </a>
+      
+    <a href="./calc.html" class="option">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+        <g stroke="currentColor" stroke-miterlimit="10">
+          <rect x="12" y="8" width="36" height="42" rx="5" fill="none" stroke-width="4"/>
+          <path fill="none" stroke-width="3" d="M12 18h36"/>
+          <ellipse cx="20" cy="25" rx="2" ry="2"/>
+          <ellipse cx="30" cy="25" rx="2" ry="2"/>
+          <ellipse cx="40" cy="25" rx="2" ry="2"/>
+          <ellipse cx="20" cy="34" rx="2" ry="2"/>
+          <ellipse cx="30" cy="34" rx="2" ry="2"/>
+          <ellipse cx="40" cy="34" rx="2" ry="2"/>
+          <ellipse cx="20" cy="41" rx="2" ry="2"/>
+          <ellipse cx="30" cy="41" rx="2" ry="2"/>
+          <ellipse cx="40" cy="41" rx="2" ry="2"/>
+        </g>
+      </svg>
+      <span class="option-title">Calculator</span>
+    </a>
+    
+    <a href="https://github.com/amarcu5/GBM-resectability-prediction" class="option">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+        <path d="M23 36L9 31v-3l14-6v4l-9 3 9 3zM36 17l-7 24h-5l7-24zM37 22l14 6v3l-14 5v-4l9-3-9-3z"/>
+      </svg>
+      <span class="option-title">Source</span>
+    </a>
+  
+  </div>
+  
+</body>
+</html>

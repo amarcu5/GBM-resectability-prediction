@@ -1,0 +1,13 @@
+{
+  "name": "GBM resectability prediction",
+  "short_name": "GBM resectability",
+  "icons": [{
+    "src": "./icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }],
+  "start_url": "./calc.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#52659C"
+}

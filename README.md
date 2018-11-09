@@ -1,1 +1,0 @@
-# GBM-resectability-prediction
