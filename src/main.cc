@@ -20,6 +20,7 @@
 
 #include <fann.h>
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -83,10 +84,15 @@ int main(int argc, char **argv) {
     
     // Save predictions and training data
     int run = fold * kCrossValidationOuterFolds + repeat;
-    std::vector<std::string> train_header = {
-      "input0", "input1", "input2", "input3", "input4",
-      "output0"
-    };
+    unsigned input_size = fann_num_input_train_data(training_data.get());
+    unsigned output_size = fann_num_output_train_data(training_data.get());
+    std::vector<std::string> train_header;
+    std::generate_n(std::back_inserter(train_header), input_size, [&]() {
+      return "input" + std::to_string(train_header.size());
+    });
+    std::generate_n(std::back_inserter(train_header), output_size, [&]() {
+      return "output" + std::to_string(train_header.size() - input_size);
+    });
     WriteCsv("data/processed/train-" + std::to_string(run) + ".csv",
              GetTrainDataValues(training_data), train_header);
     WriteCsv("data/processed/test-" + std::to_string(run) + ".csv",

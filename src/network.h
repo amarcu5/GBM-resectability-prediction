@@ -31,7 +31,7 @@
 class FannNetworkDescriptor {
  public:
   /** Create a descriptor with a default configuration. */
-  FannNetworkDescriptor();
+  FannNetworkDescriptor(unsigned input_size = 1, unsigned output_size = 1);
   
   /** Create a ``FannNetwork`` object using the descriptor. */
   FannNetwork CreateNetwork();
@@ -54,6 +54,9 @@ class FannNetworkDescriptor {
   void PrintDescription();
   
  private:
+  unsigned num_input_;
+  unsigned num_output_;
+  
   float learning_momentum_;
   float learning_rate_;
   fann_train_enum training_algorithm_;

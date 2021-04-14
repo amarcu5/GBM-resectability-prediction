@@ -71,10 +71,14 @@ FannNetworkDescriptor EvolutionaryOptimize(
 
   double best_ever_score = std::numeric_limits<float>::max();
 
+  unsigned input_size = fann_num_input_train_data(stratified_data[0].get());
+  unsigned output_size = fann_num_output_train_data(stratified_data[0].get());
+
   // Initialise descriptor population with 1 parent using default configuration
   std::vector<std::pair<FannNetworkDescriptor, double>> scored_descriptors;
   scored_descriptors.push_back(std::make_pair(
-      FannNetworkDescriptor(), std::numeric_limits<double>::max()));
+      FannNetworkDescriptor(input_size, output_size), 
+      std::numeric_limits<double>::max()));
 
   for (int generation = 0; generation < kMaxGenerations; ++generation) {
 

@@ -22,13 +22,16 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <iostream>
 #include <random>
 #include <vector>
 
 thread_local static std::mt19937 rng{std::random_device{}()};
 
-FannNetworkDescriptor::FannNetworkDescriptor() {
+FannNetworkDescriptor::FannNetworkDescriptor(unsigned input_size,
+                                             unsigned output_size)
+    : num_input_(input_size), num_output_(output_size) {
   Reset();
 }
   
@@ -85,11 +88,12 @@ void FannNetworkDescriptor::Reset() {
   layers_.clear();
   layer_activation_funcs_.clear();
   layer_activation_steepness_.clear();
-  layers_.insert(layers_.end(), {5, 3, 1});
+  layers_.insert(layers_.end(), 
+                 {num_input_, unsigned(sqrt(num_input_)), num_output_});
   layer_activation_funcs_.insert(layer_activation_funcs_.end(),
-                                {FANN_SIGMOID_STEPWISE, FANN_LINEAR});
+                                 {FANN_SIGMOID, FANN_SIGMOID});
   layer_activation_steepness_.insert(layer_activation_steepness_.end(),
-                                    {0.5f, 0.5f});
+                                     {0.5f, 0.5f});
   
   quickprop_decay_ = -0.0001f;
   quickprop_mu_ = 1.75f;
@@ -273,7 +277,7 @@ void FannNetworkDescriptor::Mutate(float small_chance,
     std::vector<fann_activationfunc_enum> new_layer_activation_funcs_;
     std::vector<float> new_layer_activation_steepness_;
     
-    fann_activationfunc_enum last_func = FANN_SIGMOID_STEPWISE;
+    fann_activationfunc_enum last_func = layer_activation_funcs_.back();
     
     new_layers_.push_back(layers_[0]);
     for (int layer = 1; layer < new_layer_count - 1; ++layer) {
@@ -302,7 +306,7 @@ void FannNetworkDescriptor::Mutate(float small_chance,
   }
   
   // Increase or decrease hidden neurone count/activation function/steepness
-  for (unsigned layer = 0; layer < layer_activation_funcs_.size(); ++layer) {
+  for (unsigned layer = 0; layer < layer_activation_funcs_.size() - 1; ++layer) {
     if (layer < (layer_activation_funcs_.size() - 1) &&
         real_dist(rng) <= big_chance) {
       int current_layers_ = layers_[layer + 1];
