@@ -8,7 +8,7 @@ To ensure reproducibility the entire project runs within a Docker container. If 
 
 ```bash
 docker build -t gbm-resectability-prediction .
-docker run -it -v $(pwd):/home/ gbm-resectability-prediction build test run
+docker run -it --rm -v $(pwd):/home/ gbm-resectability-prediction build test run
 ```
 
 Please note that [FANN formatted](https://libfann.github.io/fann/docs/files/fann_training_data_cpp-h.html#training_data.read_train_from_file) training data files are required and should be placed under `./data/raw/`. Ethics and privacy concerns prevent sharing of the original data set.
