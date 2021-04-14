@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
   doxygen=1.8.13-10 \
   && rm -rf /var/lib/apt/lists/*
   
-RUN pip3 install exhale==0.2.3 sphinx_rtd_theme==0.4.3
+RUN pip3 install exhale==0.2.3 sphinx_rtd_theme==0.5.2
 
 RUN mkdir /usr/include/catch2/ && wget https://github.com/catchorg/Catch2/releases/download/v2.12.1/catch.hpp -P /usr/include/catch2/
 
