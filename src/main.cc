@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
         resection_data);
     
     // Generate stacked ensemble with the best network design found
-    // Note: Cross validation is used as a convience to generate the ensemble
+    // Note: Cross validation is used as a convenience to create the ensemble
     Ensemble ensemble;
     auto network = best_descriptor.CreateNetwork();
     CrossValidation(resection_data, [&](FannTrainData &training_data_subsample,
